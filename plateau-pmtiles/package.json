@@ -1,0 +1,16 @@
+{
+  "name": "plateau-pmtiles",
+  "version": "1.0.0",
+  "description": "PLATEAU CityGML を PMTiles に変換し MapLibre GL JS で表示するためのツール",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "plateau-to-pmtiles": "./convert-plateau-to-pmtiles.mjs"
+  },
+  "scripts": {
+    "convert": "node convert-plateau-to-pmtiles.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
