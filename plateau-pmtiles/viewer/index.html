@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLATEAU PMTiles Viewer</title>
+  <link href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet">
+  <script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/pmtiles@3/dist/pmtiles.js"></script>
+  <style>
+    html, body, #map { margin: 0; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    // 変換スクリプトで生成した .pmtiles のパス/URLに書き換える
+    const PMTILES_URL = './bldg.pmtiles';
+    // tippecanoe 実行時に -l で指定したレイヤー名と一致させる
+    const SOURCE_LAYER = 'bldg';
+
+    const protocol = new pmtiles.Protocol();
+    maplibregl.addProtocol('pmtiles', protocol.tile);
+
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: {
+        version: 8,
+        sources: {
+          bldg: {
+            type: 'vector',
+            url: `pmtiles://${PMTILES_URL}`,
+          },
+        },
+        layers: [
+          {
+            id: 'background',
+            type: 'background',
+            paint: { 'background-color': '#f2efe9' },
+          },
+          {
+            id: 'bldg-fill',
+            type: 'fill',
+            source: 'bldg',
+            'source-layer': SOURCE_LAYER,
+            paint: {
+              'fill-color': '#d9743a',
+              'fill-opacity': 0.7,
+            },
+          },
+          {
+            id: 'bldg-outline',
+            type: 'line',
+            source: 'bldg',
+            'source-layer': SOURCE_LAYER,
+            paint: {
+              'line-color': '#7a3c14',
+              'line-width': 0.5,
+            },
+          },
+        ],
+      },
+      center: [139.767, 35.681],
+      zoom: 14,
+    });
+
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+    map.on('load', async () => {
+      const p = new pmtiles.PMTiles(PMTILES_URL);
+      try {
+        const meta = await p.getHeader();
+        map.setCenter([meta.centerLon, meta.centerLat]);
+        map.setZoom(meta.maxZoom > 14 ? 14 : meta.maxZoom);
+      } catch (err) {
+        console.warn('PMTiles メタデータの取得に失敗しました。中心座標は既定値を使用します。', err);
+      }
+    });
+  </script>
+</body>
+</html>
