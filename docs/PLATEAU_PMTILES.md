@@ -88,6 +88,27 @@ pmtiles convert bldg.mbtiles bldg.pmtiles
 PMTiles は HTTP Range リクエストでタイルを直接読めるため、静的ファイルサーバー
 （S3 / Cloudflare R2 / GitHub Pages 等）に置くだけで配信できる（タイルサーバー不要）。
 
+## 4.5. （代替手順）すでに MVT 配信形式で入手できる場合
+
+G空間情報センターの都市によっては、CityGML を変換せずに、あらかじめベクトルタイル化された
+**MVT**（`{z}/{x}/{y}.mvt` または `.pbf` のタイルピラミッド形式のディレクトリ）が
+ダウンロードできる場合がある。その場合は手順1〜3（CityGML → GeoJSON → MBTiles）は不要で、
+ディレクトリをそのまま PMTiles 化できる。
+
+```bash
+pip install pmtiles
+pmtiles-convert bldg.pmtiles ./mvt_tiles_dir/
+```
+
+- `pmtiles-convert` は Python 版 `pmtiles` パッケージに含まれる CLI で、
+  `{z}/{x}/{y}` のタイルディレクトリを直接読み取って PMTiles に変換できる
+- 一方、Go 製 CLI（`pmtiles convert`）は MBTiles（SQLite）専用で、タイルディレクトリは読めない
+- `nusamai` や `tippecanoe` も不要なため、CityGML から変換するより大幅に手順が少なくなる
+
+CityGML 由来の経路と MVT 由来の経路は出力されるレイヤー名・属性スキーマが異なる場合があるため、
+手順5（MapLibre 表示）の `source-layer` 名は、実際に使うデータに合わせて確認・調整すること
+（`pmtiles show bldg.pmtiles` や [PMTiles Viewer](https://pmtiles.io/) でレイヤー名を確認できる）。
+
 ## 5. MapLibre GL JS での表示
 
 ブラウザ側では `pmtiles` npm パッケージのプロトコルハンドラを MapLibre に登録し、
