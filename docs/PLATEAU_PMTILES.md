@@ -28,7 +28,7 @@ PMTiles (.pmtiles)        ④ MapLibre GL JS で表示
 
 | ツール | 役割 | インストール例 |
 |---|---|---|
-| [PLATEAU GIS Converter](https://github.com/MIERUNE/plateau-gis-converter)（`nusamai` / `plateau-gis-converter`） | CityGML → GeoJSON 変換 | GitHub Releases からバイナリ取得し `/usr/local/bin` に配置 |
+| [nusamai](https://github.com/MIERUNE/plateau-gis-converter)（リポジトリ名は `plateau-gis-converter`、実行バイナリ名は `nusamai`） | CityGML → GeoJSON 変換 | GitHub Releases からバイナリ取得し `/usr/local/bin` に配置 |
 | [tippecanoe](https://github.com/felt/tippecanoe) | GeoJSON → MBTiles（ベクトルタイル生成） | macOS: `brew install tippecanoe` / Linux: ソースビルド |
 | [pmtiles CLI (go-pmtiles)](https://docs.protomaps.com/pmtiles/cli) | MBTiles → PMTiles | `go install github.com/protomaps/go-pmtiles@latest` または GitHub Releases |
 | Node.js 18+ | 変換オーケストレーションスクリプトの実行 | 既存環境でOK |
@@ -58,7 +58,7 @@ PMTiles 化の対象として最もよく使われるのは建築物モデル（
 ## 2. CityGML → GeoJSON 変換
 
 ```bash
-plateau-gis-converter <input_dir>/udx/bldg/*.gml --sink geojson --output bldg.geojson
+nusamai <input_dir>/udx/bldg/*.gml --sink geojson --output bldg.geojson
 ```
 
 CityGML には高さ・階数・用途・建築年などの属性（LOD0〜LOD2 ジオメトリ含む）が入っているため、
@@ -147,7 +147,7 @@ node plateau-pmtiles/convert-plateau-to-pmtiles.mjs \
 ## 参考リンク
 
 - [Project PLATEAU](https://www.mlit.go.jp/plateau/)
-- [PLATEAU GIS Converter (MIERUNE)](https://github.com/MIERUNE/plateau-gis-converter)
+- [nusamai / plateau-gis-converter (MIERUNE)](https://github.com/MIERUNE/plateau-gis-converter)
 - [tippecanoe](https://github.com/felt/tippecanoe)
 - [PMTiles](https://docs.protomaps.com/pmtiles/)
 - [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/)

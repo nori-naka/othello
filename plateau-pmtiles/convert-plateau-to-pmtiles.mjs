@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // PLATEAU CityGML -> GeoJSON -> MBTiles -> PMTiles の変換パイプラインを
-// 外部CLI (plateau-gis-converter / tippecanoe / pmtiles) を呼び出して実行する。
+// 外部CLI (nusamai / tippecanoe / pmtiles) を呼び出して実行する。
 import { parseArgs } from 'node:util';
 import { spawnSync } from 'node:child_process';
 import { mkdtempSync, rmSync, mkdirSync, readdirSync, statSync, existsSync } from 'node:fs';
@@ -21,7 +21,7 @@ function parseCliArgs(argv) {
       maxzoom: { type: 'string', default: '16' },
       workdir: { type: 'string' },
       'keep-temp': { type: 'boolean', default: false },
-      'citygml-converter': { type: 'string', default: 'plateau-gis-converter' },
+      'citygml-converter': { type: 'string', default: 'nusamai' },
       tippecanoe: { type: 'string', default: 'tippecanoe' },
       pmtiles: { type: 'string', default: 'pmtiles' },
       help: { type: 'boolean', default: false },
@@ -45,7 +45,7 @@ function printHelp() {
   --maxzoom <n>         最大ズームレベル (既定: 16)
   --workdir <dir>       中間ファイルの作業ディレクトリ (既定: OSの一時ディレクトリ)
   --keep-temp           中間ファイル(GeoJSON/MBTiles)を削除せず残す
-  --citygml-converter   CityGML変換CLIのバイナリ名/パス (既定: plateau-gis-converter)
+  --citygml-converter   CityGML変換CLIのバイナリ名/パス (既定: nusamai)
   --tippecanoe          tippecanoeバイナリ名/パス (既定: tippecanoe)
   --pmtiles             pmtiles CLIバイナリ名/パス (既定: pmtiles)
 `);
